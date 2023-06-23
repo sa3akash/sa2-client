@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
-import './login.scss';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
+import '@pages/auth/login/login.scss';
 import { FaArrowRight } from 'react-icons/fa';
-import { authService } from '../../../services/api/auth/auth.services';
+import { authService } from '@services/api/auth/auth.services';
 import { AxiosError, AxiosResponse } from 'axios';
 
 const Login = () => {
@@ -16,10 +15,10 @@ const Login = () => {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [alertType, setAlertType] = useState('');
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   // const [setStoredUsername] = useLocalStorage('username', 'set');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const loginUser = async (event: React.FormEvent): Promise<void> => {
     setLoading(true);

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link, useSearchParams } from 'react-router-dom';
-import backgroundImage from '/assets/images/background.jpg';
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
-import './resetPassword.scss';
-import { authService } from '../../../services/api/auth/auth.services';
+import backgroundImage from '@assets/images/background.jpg';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
+import '@pages/auth/resetPassword/resetPassword.scss';
+import { authService } from '@services/api/auth/auth.services';
 import { AxiosError, AxiosResponse } from 'axios';
 
 const ResetPassword = () => {
@@ -16,7 +16,6 @@ const ResetPassword = () => {
   const [alertType, setAlertType] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const [searchParams] = useSearchParams();
-
 
   const resetPassword = async (event: React.FormEvent) => {
     event.preventDefault();

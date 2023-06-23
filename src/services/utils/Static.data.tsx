@@ -1,15 +1,14 @@
-import React from 'react';
 
-import blessed from '/assets/feelings/blessed.jpg';
-import excited from '/assets/feelings/excited.jpg';
-import happy from '/assets/feelings/happy.jpg';
-import loved from '/assets/feelings/loved.jpg';
-import angry from '/assets/reactions/angry.png';
-import haha from '/assets/reactions/haha.png';
-import like from '/assets/reactions/like.png';
-import love from '/assets/reactions/love.png';
-import sad from '/assets/reactions/sad.png';
-import wow from '/assets/reactions/wow.png';
+import blessed from '@assets/feelings/blessed.jpg';
+import excited from '@assets/feelings/excited.jpg';
+import happy from '@assets/feelings/happy.jpg';
+import loved from '@assets/feelings/loved.jpg';
+import angry from '@assets/reactions/angry.png';
+import haha from '@assets/reactions/haha.png';
+import like from '@assets/reactions/like.png';
+import love from '@assets/reactions/love.png';
+import sad from '@assets/reactions/sad.png';
+import wow from '@assets/reactions/wow.png';
 import {
   FaBirthdayCake,
   FaComments,
@@ -31,49 +30,49 @@ export const sideBarItems = [
   {
     index: 1,
     name: 'Streams',
-    url: '/app/social/streams',
+    url: '/streams',
     iconName: 'FaNewspaper'
   },
   {
     index: 2,
     name: 'Chat',
-    url: '/app/social/chat/messages',
+    url: '/chat/messages',
     iconName: 'FaComments'
   },
   {
     index: 3,
     name: 'People',
-    url: '/app/social/people',
+    url: '/people',
     iconName: 'FaUsers'
   },
   {
     index: 4,
     name: 'Following',
-    url: '/app/social/following',
+    url: '/following',
     iconName: 'FaUserPlus'
   },
   {
     index: 5,
     name: 'Followers',
-    url: '/app/social/followers',
+    url: '/followers',
     iconName: 'FaHeart'
   },
   {
     index: 6,
     name: 'Photos',
-    url: '/app/social/photos',
+    url: '/photos',
     iconName: 'FaImages'
   },
   {
     index: 7,
     name: 'Notifications',
-    url: '/app/social/notifications',
+    url: '/notifications',
     iconName: 'FaRegBell'
   },
   {
     index: 8,
     name: 'Profile',
-    url: '/app/social/profile',
+    url: '/profile',
     iconName: 'FaRegUser'
   }
 ];

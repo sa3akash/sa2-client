@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/input/Input';
 import Button from '../../../components/button/Button';
@@ -25,7 +24,9 @@ const Register = () => {
   //   const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
   //   const [pageReload] = useSessionStorage('pageReload', 'set');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  console.log(user);
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUp((prev) => ({ ...prev, [event.target.name]: event.target.value }));

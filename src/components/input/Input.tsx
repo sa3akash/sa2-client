@@ -1,4 +1,4 @@
-import './index.scss';
+import '@components/input/index.scss';
 import React, { forwardRef } from 'react';
 
 interface InputInterfacts {

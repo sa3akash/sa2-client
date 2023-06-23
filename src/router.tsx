@@ -1,6 +1,6 @@
+// import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { AuthTabs, ForgotPassword, ResetPassword } from './pages/auth';
-import React from 'react';
+import { AuthTabs, ForgotPassword, ResetPassword } from '@pages/auth';
 
 
 export const AppRouter = () => {

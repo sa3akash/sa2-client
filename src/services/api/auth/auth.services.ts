@@ -1,5 +1,5 @@
-import api from '../../http';
-import { IResetPasswordData, ISignUpData, ISigninData } from './auth.interfaces';
+import api from '@services/http';
+import { IResetPasswordData, ISignUpData, ISigninData } from '@services/api/auth/auth.interfaces';
 import {ResponseType} from 'axios';
 
 class AuthService {
