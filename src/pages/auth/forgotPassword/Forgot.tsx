@@ -1,5 +1,5 @@
 import { FaArrowLeft } from 'react-icons/fa';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import backgroundImage from '@assets/images/background.jpg';
 import Input from '@components/input/Input';
@@ -22,20 +22,23 @@ const ForgotPassword = () => {
     try {
       console.log(email);
 
-        const response: AxiosResponse<any,any> = await authService.forgotPassword(email) as unknown as AxiosResponse<any,any>;
-        setLoading(false);
-        setEmail('');
-        setShowAlert(false);
-        setAlertType('alert-success');
-        setResponseMessage(response?.data?.message);
-        setLoading(false);
+      const response: AxiosResponse<any, any> = (await authService.forgotPassword(email)) as unknown as AxiosResponse<
+        any,
+        any
+      >;
+      setLoading(false);
+      setEmail('');
+      setShowAlert(false);
+      setAlertType('alert-success');
+      setResponseMessage(response?.data?.message);
+      setLoading(false);
     } catch (error: unknown) {
-      if(error instanceof AxiosError) {
-          setResponseMessage(error?.response?.data?.message);
+      if (error instanceof AxiosError) {
+        setResponseMessage(error?.response?.data?.message);
       }
-        setAlertType('alert-error');
-        setLoading(false);
-        setShowAlert(true);
+      setAlertType('alert-error');
+      setLoading(false);
+      setShowAlert(true);
     }
   };
 
@@ -77,11 +80,11 @@ const ForgotPassword = () => {
                     disabled={!email}
                   />
 
-                    <span className="login">
-                  <Link to={'/'}>
+                  <span className="login">
+                    <Link to={'/'}>
                       <FaArrowLeft className="arrow-left" /> Back to Login
-                  </Link>
-                    </span>
+                    </Link>
+                  </span>
                 </form>
               </div>
             </div>

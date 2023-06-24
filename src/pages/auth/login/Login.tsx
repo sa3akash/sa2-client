@@ -6,6 +6,10 @@ import '@pages/auth/login/login.scss';
 import { FaArrowRight } from 'react-icons/fa';
 import { authService } from '@services/api/auth/auth.services';
 import { AxiosError, AxiosResponse } from 'axios';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { useDispatch } from 'react-redux';
+import { Utils } from '@services/utils/Utils.services';
+import useSessionStorage from '@hooks/useSessionStorage';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -15,26 +19,35 @@ const Login = () => {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [alertType, setAlertType] = useState('');
-  // const [user, setUser] = useState();
-  // const [setStoredUsername] = useLocalStorage('username', 'set');
+  const [user, setUser] = useState();
+
+  const [setStoredUsername] = useLocalStorage('username', 'set');
+  const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
+  const [pageReload] = useSessionStorage('pageReload', 'set');
+
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const loginUser = async (event: React.FormEvent): Promise<void> => {
     setLoading(true);
     event.preventDefault();
     try {
-      const result: AxiosResponse<any, any> = (await authService.signIn({
+      const { data }: AxiosResponse<any, any> = (await authService.signIn({
         username: username,
         password: password
       })) as unknown as AxiosResponse<any, any>;
-      setHasError(false);
+
+      setLoggedIn(keepLoggedIn);
+      setStoredUsername(username);
+
       setAlertType('alert-success');
-      console.log(result);
+      setUser(data.user);
       navigate('/streams');
       setLoading(false);
+
+      Utils.dispatchUser(data, pageReload, dispatch);
     } catch (error: unknown) {
-      if(error instanceof AxiosError) {
+      if (error instanceof AxiosError) {
         setLoading(false);
         setHasError(true);
         setAlertType('alert-error');

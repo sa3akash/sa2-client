@@ -1,4 +1,3 @@
-
 import blessed from '@assets/feelings/blessed.jpg';
 import excited from '@assets/feelings/excited.jpg';
 import happy from '@assets/feelings/happy.jpg';

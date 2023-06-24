@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
-import './signup.scss';
-import { authService } from '../../../services/api/auth/auth.services';
+import '@pages/auth/signup/signup.scss';
 import { AxiosError, AxiosResponse } from 'axios';
-import { Utils } from '../../../services/utils/Utils.services';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { Utils } from '@services/utils/Utils.services';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
+import { authService } from '@services/api/auth/auth.services';
+import { useDispatch } from 'react-redux';
+import useSessionStorage from '@hooks/useSessionStorage';
 
 interface SignUpData {
   username: string;
@@ -20,13 +23,12 @@ const Register = () => {
   const [alertType, setAlertType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [user, setUser] = useState();
-  //   const [setStoredUsername] = useLocalStorage('username', 'set');
-  //   const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
-  //   const [pageReload] = useSessionStorage('pageReload', 'set');
-  const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  console.log(user);
+  const [setStoredUsername] = useLocalStorage('username', 'set');
+  const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
+  const [pageReload] = useSessionStorage('pageReload', 'set');
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUp((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -38,16 +40,22 @@ const Register = () => {
     try {
       const avatarColor = Utils.avatarColor();
       const avatarImage = Utils.generateAvatar(signUp.username.charAt(0).toUpperCase(), avatarColor);
-      const result: AxiosResponse<any, any> = (await authService.signUp({
+      const { data }: AxiosResponse<any, any> = (await authService.signUp({
         username: signUp.username,
         email: signUp.email,
         password: signUp.password,
         avatarColor,
         avatarImage
       })) as unknown as AxiosResponse<any, any>;
-      setUser(result.data.user);
+
+      setLoggedIn(true);
+      setStoredUsername(signUp.username);
+
+      setUser(data.user);
       navigate('/streams');
       setLoading(false);
+
+      Utils.dispatchUser(data, pageReload, dispatch);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data?.message);

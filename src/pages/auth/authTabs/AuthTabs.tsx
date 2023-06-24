@@ -1,6 +1,6 @@
-import  React, { useState } from 'react';
+import React, { useState } from 'react';
 import '@pages/auth/authTabs/authTabs.scss';
-import backgroundImage from '@assets/images/background.jpg'
+import backgroundImage from '@assets/images/background.jpg';
 import Login from '@pages/auth/login/Login';
 import Register from '@pages/auth/signup/SignUp';
 

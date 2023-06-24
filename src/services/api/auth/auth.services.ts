@@ -1,22 +1,22 @@
 import api from '@services/http';
 import { IResetPasswordData, ISignUpData, ISigninData } from '@services/api/auth/auth.interfaces';
-import {ResponseType} from 'axios';
+import { ResponseType } from 'axios';
 
 class AuthService {
   async signUp(body: ISignUpData) {
-    const response:ResponseType = await api.post('/signup', body);
+    const response: ResponseType = await api.post('/signup', body);
     return response;
   }
   async signIn(body: ISigninData) {
-    const response:ResponseType = await api.post('/signin', body);
+    const response: ResponseType = await api.post('/signin', body);
     return response;
   }
   async forgotPassword(email: string) {
-    const response:ResponseType = await api.post('/forgot-password', { email });
+    const response: ResponseType = await api.post('/forgot-password', { email });
     return response;
   }
   async resetPassword(token: string, body: IResetPasswordData) {
-    const response:ResponseType = await api.post(`/reset-password/${token}`, body);
+    const response: ResponseType = await api.post(`/reset-password/${token}`, body);
     return response;
   }
 }

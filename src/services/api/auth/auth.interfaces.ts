@@ -1,22 +1,16 @@
-
-
-
-
-
 export interface ISigninData {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 export interface ISignUpData {
-    email: string;
-    username: string;
-    password: string;
-    avatarColor: string;
-    avatarImage: string;
+  email: string;
+  username: string;
+  password: string;
+  avatarColor: string;
+  avatarImage: string;
 }
 export interface IResetPasswordData {
-    password: string;
+  password: string;
   confirmPassword: string;
 }
-
