@@ -48,11 +48,19 @@ const Register = () => {
         avatarImage
       })) as unknown as AxiosResponse<any, any>;
 
+<<<<<<< HEAD
       setLoggedIn(true);
       setStoredUsername(signUp.username);
 
       setUser(data.user);
       navigate('/streams');
+=======
+      setUser(data.user);
+      setLoggedIn(true);
+      setStoredUsername(signUp.username);
+
+      navigate('/social/streams');
+>>>>>>> feature/streams
       setLoading(false);
 
       Utils.dispatchUser(data, pageReload, dispatch);

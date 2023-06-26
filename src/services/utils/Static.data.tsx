@@ -29,50 +29,90 @@ export const sideBarItems = [
   {
     index: 1,
     name: 'Streams',
+<<<<<<< HEAD
     url: '/streams',
     iconName: 'FaNewspaper'
+=======
+    url: '/social/streams',
+    icon: <FaNewspaper className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 2,
     name: 'Chat',
+<<<<<<< HEAD
     url: '/chat/messages',
     iconName: 'FaComments'
+=======
+    url: '/social/chat/messages',
+    icon: <FaComments className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 3,
     name: 'People',
+<<<<<<< HEAD
     url: '/people',
     iconName: 'FaUsers'
+=======
+    url: '/social/people',
+    icon: <FaUsers className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 4,
     name: 'Following',
+<<<<<<< HEAD
     url: '/following',
     iconName: 'FaUserPlus'
+=======
+    url: '/social/following',
+    icon: <FaUserPlus className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 5,
     name: 'Followers',
+<<<<<<< HEAD
     url: '/followers',
     iconName: 'FaHeart'
+=======
+    url: '/social/followers',
+    icon: <FaHeart className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 6,
     name: 'Photos',
+<<<<<<< HEAD
     url: '/photos',
     iconName: 'FaImages'
+=======
+    url: '/social/photos',
+    icon: <FaImages className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 7,
     name: 'Notifications',
+<<<<<<< HEAD
     url: '/notifications',
     iconName: 'FaRegBell'
+=======
+    url: '/social/notifications',
+    icon: <FaRegBell className="icon" />
+>>>>>>> feature/streams
   },
   {
     index: 8,
     name: 'Profile',
+<<<<<<< HEAD
     url: '/profile',
     iconName: 'FaRegUser'
+=======
+    url: '/social/profile',
+    icon: <FaRegUser className="icon" />
+>>>>>>> feature/streams
   }
 ];
 

@@ -19,7 +19,11 @@ const Login = () => {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [alertType, setAlertType] = useState('');
+<<<<<<< HEAD
   const [user, setUser] = useState();
+=======
+  const [user, setUser] = useState(null);
+>>>>>>> feature/streams
 
   const [setStoredUsername] = useLocalStorage('username', 'set');
   const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
@@ -37,12 +41,21 @@ const Login = () => {
         password: password
       })) as unknown as AxiosResponse<any, any>;
 
+<<<<<<< HEAD
       setLoggedIn(keepLoggedIn);
       setStoredUsername(username);
 
       setAlertType('alert-success');
       setUser(data.user);
       navigate('/streams');
+=======
+      setUser(data.user);
+
+      setLoggedIn(keepLoggedIn);
+      setStoredUsername(username);
+      setAlertType('alert-success');
+      navigate('/social/streams');
+>>>>>>> feature/streams
       setLoading(false);
 
       Utils.dispatchUser(data, pageReload, dispatch);

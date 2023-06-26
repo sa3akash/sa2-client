@@ -1,5 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import '@pages/social/streams/stream.scss';
+<<<<<<< HEAD
+=======
+import Suggestions from '@components/suggestions/Suggestions';
+>>>>>>> feature/streams
 
 const Streams = () => {
   const [posts, setPosts] = useState([]);
@@ -7,8 +11,14 @@ const Streams = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPostsCount, setTotalPostsCount] = useState(0);
+<<<<<<< HEAD
   const bodyRef = useRef(null);
   const bottomLineRef = useRef();
+=======
+
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const bottomLineRef = useRef<HTMLDivElement>(null);
+>>>>>>> feature/streams
   let appPosts = useRef([]);
 
   const PAGE_SIZE = 8;
@@ -80,9 +90,18 @@ const Streams = () => {
         <div className="streams-post" ref={bodyRef}>
           {/* <PostForm /> */}
           {/* <Posts allPosts={posts} postsLoading={loading} userFollowing={following} /> */}
+<<<<<<< HEAD
           {/* <div ref={bottomLineRef} style={{ marginBottom: '50px', height: '50px' }}></div> */}
         </div>
         <div className="streams-suggestions">{/* <Suggestions /> */}</div>
+=======
+          <div ref={bottomLineRef} style={{ marginBottom: '50px', height: '50px' }}></div>
+        </div>
+        <div className="streams-suggestions">
+          {' '}
+          <Suggestions />{' '}
+        </div>
+>>>>>>> feature/streams
       </div>
     </div>
   );
