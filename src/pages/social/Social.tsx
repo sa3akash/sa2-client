@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import '@pages/social/social.scss';
 import Header from '@components/header/Header';
 import Sidebar from '@components/sidebar/Sidebar';

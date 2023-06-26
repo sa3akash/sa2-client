@@ -87,8 +87,7 @@ const Streams = () => {
           <div ref={bottomLineRef} style={{ marginBottom: '50px', height: '50px' }}></div>
         </div>
         <div className="streams-suggestions">
-          {' '}
-          <Suggestions />{' '}
+          <Suggestions />
         </div>
       </div>
     </div>
