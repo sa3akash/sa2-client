@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-// import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { AuthTabs, ForgotPassword, ResetPassword } from '@pages/auth';
-=======
 import { lazy, Suspense } from 'react';
-import { useRoutes } from 'react-router-dom';
 import ProtectedRoute from '@pages/protectedRoutes';
 import StreamsSkeleton from '@pages/social/streams/StreamsSkeleton';
 
@@ -21,7 +16,6 @@ const Photos = lazy(() => import('@pages/social/photos/Photos'));
 const Notifications = lazy(() => import('@pages/social/notifications/Notifications'));
 const Profile = lazy(() => import('@pages/social/profile/Profile'));
 const Error = lazy(() => import('@pages/social/error/Error'));
->>>>>>> feature/streams
 
 export const AppRouter = () => {
   const element = useRoutes([
@@ -36,11 +30,7 @@ export const AppRouter = () => {
     //     { path: 'tasks', element: <DashboardTasks /> },
     //   ],
     // },
-<<<<<<< HEAD
-    { path: '/', element: <AuthTabs /> },
-    { path: '/forgot-password', element: <ForgotPassword /> },
-    { path: '/reset-password', element: <ResetPassword /> }
-=======
+
     {
       path: '/',
       element: (
@@ -147,7 +137,6 @@ export const AppRouter = () => {
         </Suspense>
       )
     }
->>>>>>> feature/streams
   ]);
 
   return element;

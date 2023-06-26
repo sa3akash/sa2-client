@@ -1,18 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from '@store/reducer/user.reducer';
-<<<<<<< HEAD
-
-export const store = configureStore({
-  reducer: {
-    user: userSlice
-=======
-import suggetionSlice from '@store/reducer/suggetions';
-
+import suggetionSlice from './reducer/suggetions';
 export const store = configureStore({
   reducer: {
     user: userSlice,
     suggetionFriends: suggetionSlice
->>>>>>> feature/streams
   }
 });
 
