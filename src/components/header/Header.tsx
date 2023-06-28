@@ -16,13 +16,18 @@ import { ProfileUtils } from '@services/utils/Profile.services';
 import { userService } from '@services/api/users/user.services';
 import useLocalStorage from '@hooks/useLocalStorage';
 import useSessionStorage from '@hooks/useSessionStorage';
+import { AxiosError } from 'axios';
+import { notificationServices } from '@services/api/notification/notification.services';
+import { NotificationDoc } from '@pages/social/notifications/Notifications';
+import { NotificationUtils } from '@services/utils/Notification.utils';
+import NotificationPreview from '@components/dialog/NotificationPreview';
 
 const Header = () => {
   const { profile } = useSelector((state: RootState) => state.user);
   //   const { chatList } = useSelector((state:RootState) => state.chat);
   // const [environment, setEnvironment] = useState('');
   const [settings, setSettings] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<any>([]);
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationDialogContent, setNotificationDialogContent] = useState({
     post: '',
@@ -47,6 +52,8 @@ const Header = () => {
   const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
   const [deleteSessionPageReload] = useSessionStorage('pageReload', 'delete');
 
+  const [loading, setLoading] = useState(false);
+
   const backgrounColor = `${
     Utils.appEnvironment() === 'DEV' || Utils.appEnvironment() === 'LOCAL'
       ? '#50b5ff'
@@ -55,36 +62,29 @@ const Header = () => {
       : ''
   }`;
 
+  const onMarkAsRead = async (notification: NotificationDoc) => {
+    NotificationUtils.markMessageAsRead(notification, dispatch, setNotificationDialogContent);
+  };
+
+  const onDeleteNotification = async (notificatonId: string) => {
+    await notificationServices.deleteNotification(dispatch, notificatonId);
+  };
+
   const getUserNotifications = async () => {
-    // try {
-    //   const response = await notificationService.getUserNotifications();
-    //   const mappedNotifications = NotificationUtils.mapNotificationDropdownItems(
-    //     response.data.notifications,
-    //     setNotificationCount
-    //   );
-    //   setNotifications(mappedNotifications);
-    //   socketService?.socket.emit('setup', { userId: storedUsername });
-    // } catch (error) {
-    //   Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
-    // }
+    const data = await notificationServices.getUserNotification(dispatch, setLoading);
+
+    const mapedNotification = NotificationUtils.mapNotificationDropdownItems(data, setNotificationCount);
+    setNotifications(mapedNotification);
   };
 
-  const onMarkAsRead = async (notification: any) => {
-    // try {
-    //   NotificationUtils.markMessageAsRead(notification?._id, notification, setNotificationDialogContent);
-    // } catch (error) {
-    //   Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
-    // }
-  };
+  useEffect(() => {
+    NotificationUtils.socketIONotification(profile, notifications, 'dropdown', setNotifications, setNotificationCount);
+  }, [profile, notifications]);
 
-  const onDeleteNotification = async (messageId: string) => {
-    // try {
-    //   const response = await notificationService.deleteNotification(messageId);
-    //   Utils.dispatchNotification(response.data.message, 'success', dispatch);
-    // } catch (error) {
-    //   Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
-    // }
-  };
+  useEffectOnce(() => {
+    Utils.mapSettingsDropdownItems(setSettings);
+    getUserNotifications();
+  });
 
   const openChatPage = async (notification: any) => {
     // try {
@@ -111,21 +111,15 @@ const Header = () => {
 
   const onLogout = async () => {
     try {
-      // setLoggedIn(false);
       Utils.clearStore(dispatch, deleteStorageUsername, deleteSessionPageReload, setLoggedIn);
       await userService.logoutUser();
-
       navigate('/');
     } catch (error) {
-      console.log(error);
-      // Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
+      if (error instanceof AxiosError) {
+        Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
+      }
     }
   };
-
-  useEffectOnce(() => {
-    Utils.mapSettingsDropdownItems(setSettings);
-    // getUserNotifications();
-  });
 
   //   useEffect(() => {
   //     const env = Utils.appEnvironment();
@@ -165,7 +159,7 @@ const Header = () => {
               />
             </div>
           )}
-          {/* {notificationDialogContent?.senderName && (
+          {notificationDialogContent?.senderName && (
             <NotificationPreview
               title="Your post"
               post={notificationDialogContent?.post}
@@ -184,7 +178,7 @@ const Header = () => {
                 });
               }}
             />
-          )} */}
+          )}
           <div className="header-navbar">
             <div className="header-image" data-testid="header-image" onClick={() => navigate('/social/streams')}>
               <img src={logo} className="img-fluid" alt="" />
@@ -231,7 +225,9 @@ const Header = () => {
                         title="Notifications"
                         onMarkAsRead={onMarkAsRead}
                         onDeleteNotification={onDeleteNotification}
-                        onNavigate={() => {}}
+                        onNavigate={() => {
+                          ('');
+                        }}
                         // onLogout={()=>{}}
                       />
                     </li>
@@ -264,10 +260,10 @@ const Header = () => {
                 }}
               >
                 <span className="header-list-name profile-image">
-                  <Avatar name={profile.username!} textColor="#ffffff" size={40} />
+                  <Avatar name={`${profile.username}`} textColor="#ffffff" size={40} />
                 </span>
                 <span className="header-list-name profile-name">
-                  {profile.username!}
+                  {`${profile.username}`}
                   {!isSettingsActive ? (
                     <FaCaretDown className="header-list-icon caret" />
                   ) : (
@@ -285,8 +281,12 @@ const Header = () => {
                         title="Settings"
                         // onLogout={onLogout}
                         onNavigate={() => ProfileUtils.navigateToProfile(profile, navigate)}
-                        onDeleteNotification={() => {}}
-                        onMarkAsRead={() => {}}
+                        onDeleteNotification={() => {
+                          ('');
+                        }}
+                        onMarkAsRead={() => {
+                          ('');
+                        }}
                         onLogout={onLogout}
                       />
                     </li>

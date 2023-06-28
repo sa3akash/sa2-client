@@ -1,18 +1,26 @@
 import { useRef, useState, useEffect } from 'react';
 import '@pages/social/streams/stream.scss';
 import Suggestions from '@components/suggestions/Suggestions';
+import { notificationServices } from '@services/api/notification/notification.services';
+import { NotificationUtils } from '@services/utils/Notification.utils';
+import useEffectOnce from '@hooks/useEffectOnce';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotificationDoc } from '../notifications/Notifications';
+import { RootState } from '@store/index';
 
 const Streams = () => {
+  const { profile } = useSelector((state: RootState) => state.user);
+
   const [posts, setPosts] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPostsCount, setTotalPostsCount] = useState(0);
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const bottomLineRef = useRef<HTMLDivElement>(null);
 
-  let appPosts = useRef([]);
+  const appPosts = useRef([]);
 
   const PAGE_SIZE = 8;
 
@@ -82,6 +90,8 @@ const Streams = () => {
       <div className="streams-content">
         <div className="streams-post" ref={bodyRef}>
           {/* <PostForm /> */}
+          <h1>post form</h1>
+          <h1>all posts</h1>
           {/* <Posts allPosts={posts} postsLoading={loading} userFollowing={following} /> */}
 
           <div ref={bottomLineRef} style={{ marginBottom: '50px', height: '50px' }}></div>

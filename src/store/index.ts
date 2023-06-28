@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from '@store/reducer/user.reducer';
 import suggetionSlice from './reducer/suggetions';
+import notificatonSlice from './reducer/notifications';
 export const store = configureStore({
   reducer: {
     user: userSlice,
-    suggetionFriends: suggetionSlice
+    suggetionFriends: suggetionSlice,
+    notification: notificatonSlice
   }
 });
 

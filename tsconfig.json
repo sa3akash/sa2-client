@@ -27,7 +27,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@store/*": ["./src/store/*"],
       "@root/*": ["./src/*"],
-    },
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { UserDoc } from './interfaces';
+import { UserDoc } from '@store/reducer/interfaces';
 
 export interface UserState {
   token: string;
-  profile: UserDoc | null;
+  profile: UserDoc | null | undefined;
 }
 
 const initialState: UserState = {

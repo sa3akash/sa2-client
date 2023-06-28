@@ -2,6 +2,10 @@ import { floor, random } from 'lodash';
 import { avatarColors } from '@services/utils/Static.data';
 import { addProfile, clearProfile } from '@store/reducer/user.reducer';
 import { AppDispatch } from '@store/index';
+import { UserDoc } from '@store/reducer/interfaces';
+import { clearNotification, setNotification } from '@store/reducer/notifications';
+import { ToastDoc } from '@components/toast/Toast';
+import { Dispatch, SetStateAction } from 'react';
 
 export class Utils {
   static avatarColor() {
@@ -25,7 +29,11 @@ export class Utils {
     return canvas.toDataURL('image/png');
   }
 
-  static dispatchUser(data: any, pageReload: any, dispatch: AppDispatch) {
+  static dispatchUser(
+    data: { token: string; user: UserDoc },
+    pageReload: (arg: boolean) => void,
+    dispatch: AppDispatch
+  ) {
     pageReload(true);
     dispatch(addProfile({ token: data.token, profile: data.user }));
   }
@@ -37,10 +45,18 @@ export class Utils {
     setLoggedIn: (arg: boolean) => void
   ) {
     dispatch(clearProfile());
-    // dispatch(clearNotification());
+    dispatch(clearNotification());
     deleteStorageUsername();
     deleteSessionPageReload();
     setLoggedIn(false);
+  }
+
+  static addNotification(dispatch: AppDispatch, message: ToastDoc) {
+    dispatch(setNotification(message));
+  }
+
+  static clearAllNotification(dispatch: AppDispatch) {
+    dispatch(clearNotification());
   }
 
   static appEnvironment() {
@@ -53,9 +69,9 @@ export class Utils {
     }
   }
 
-  static mapSettingsDropdownItems(setSettings: any) {
-    const items = [];
-    const item = {
+  static mapSettingsDropdownItems(setSettings: (arg: any) => void) {
+    const items: ItemProps[] = [];
+    const item: ItemProps = {
       topText: 'My Profile',
       subText: 'View personal profile.'
     };
@@ -63,4 +79,17 @@ export class Utils {
     setSettings(items);
     return items;
   }
+
+  static appImageUrl(version: string, id: string) {
+    if (typeof version === 'string' && typeof id === 'string') {
+      version = version.replace(/['"]+/g, '');
+      id = id.replace(/['"]+/g, '');
+    }
+    return `https://res.cloudinary.com/${import.meta.env.VITE_CLOUD_NAME}/image/upload/v${version}/${id}`;
+  }
+}
+
+interface ItemProps {
+  topText: string;
+  subText: string;
 }

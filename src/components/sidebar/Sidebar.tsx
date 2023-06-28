@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   const navigateToPage = (name: string, url: string) => {
     if (name === 'Profile') {
-      url = `${url}/${profile?.username}?${createSearchParams({ id: profile?._id!, uId: profile?.uId! })}`;
+      url = `${url}/${profile?.username}?${createSearchParams({ id: profile?._id || '', uId: profile?.uId || '' })}`;
     }
     if (name === 'Streams') {
       // dispatch(getPosts());
