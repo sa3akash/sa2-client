@@ -168,7 +168,7 @@ export const emptyPostData = {
   _id: '',
   post: '',
   bgColor: '',
-  privacy: '',
+  privacy: 'Public',
   feelings: '',
   gifUrl: '',
   profilePicture: '',

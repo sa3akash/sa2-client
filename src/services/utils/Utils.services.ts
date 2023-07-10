@@ -1,4 +1,4 @@
-import { floor, random } from 'lodash';
+import { floor, random, some } from 'lodash';
 import { avatarColors } from '@services/utils/Static.data';
 import { addProfile, clearProfile } from '@store/reducer/user.reducer';
 import { AppDispatch } from '@store/index';
@@ -86,6 +86,30 @@ export class Utils {
       id = id.replace(/['"]+/g, '');
     }
     return `https://res.cloudinary.com/${import.meta.env.VITE_CLOUD_NAME}/image/upload/v${version}/${id}`;
+  }
+
+  static getVideo(videoId: any, videoVersion: any) {
+    throw new Error('Method not implemented.');
+  }
+  static getImage(imgId: any, imgVersion: any): string {
+    return imgId && imgVersion ? this.appImageUrl(imgVersion, imgId) : '';
+  }
+
+  static checkIfUserIsBlocked(blocked: any, userId: any) {
+    return some(blocked, (id) => id === userId);
+  }
+
+  static checkIfUserIsFollowed(userFollowers: any, postCreatorId: any, userId: any) {
+    return some(userFollowers, (user) => user._id === postCreatorId || postCreatorId === userId);
+  }
+
+  static checkIfUserIsOnline(username: any, onlineUsers: any) {
+    return some(onlineUsers, (user) => user === username?.toLowerCase());
+  }
+
+  static firstLetterUpperCase(word: any) {
+    if (!word) return '';
+    return `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
   }
 }
 

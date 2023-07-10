@@ -30,7 +30,6 @@ const Suggestions = () => {
   //   }, [suggestions, users]);
 
   useEffectOnce(() => {
-    // dispatch(getUserSuggestions());
     userService.getUserSuggetions(dispatch);
   });
 

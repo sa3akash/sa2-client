@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { socketService } from '@services/sockets/socket.services';
 import Toast from '@components/toast/Toast';
 import { useSelector } from 'react-redux';
-import { RootState } from './store';
+import { RootState } from '@store/index';
 
 function App() {
   const notifications = useSelector((state: RootState) => state.notification);

@@ -1,12 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from '@store/reducer/user.reducer';
-import suggetionSlice from './reducer/suggetions';
-import notificatonSlice from './reducer/notifications';
+import suggetionSlice from '@store/reducer/suggetions';
+import notificatonSlice from '@store/reducer/notifications';
+import modelSlice from '@store/reducer/model';
+import postsSlice from '@store/reducer/posts';
+import postSlice from '@store/reducer/post';
 export const store = configureStore({
   reducer: {
     user: userSlice,
     suggetionFriends: suggetionSlice,
-    notification: notificatonSlice
+    notification: notificatonSlice,
+    model: modelSlice,
+    allPosts: postsSlice,
+    post: postSlice
   }
 });
 

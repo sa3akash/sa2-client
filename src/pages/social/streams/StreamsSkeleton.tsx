@@ -1,3 +1,4 @@
+import PostFormSkeleton from '@components/posts/postForm/PostFormSkeleton';
 import SuggestionsSkeletons from '@components/suggestions/SuggestionsSkeleton';
 import '@pages/social/streams/stream.scss';
 
@@ -6,7 +7,8 @@ const StreamsSkeleton = () => {
     <div className="streams" data-testid="streams">
       <div className="streams-content">
         <div className="streams-post">
-          {/* <PostFormSkeleton /> */}
+          <PostFormSkeleton />
+
           {[1, 2, 3, 4, 5, 6].map((index) => (
             <div key={index}>{/* <PostSkeleton /> */}</div>
           ))}
