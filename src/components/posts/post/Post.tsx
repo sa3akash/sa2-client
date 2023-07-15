@@ -1,11 +1,10 @@
 import Avatar from '@components/avatar/Avatar';
-import PropTypes from 'prop-types';
 import { FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
 import { find } from 'lodash';
 import '@components/posts/post/post.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useLocalStorage from '@hooks/useLocalStorage';
 import { feelingsList, privacyList } from '@services/utils/Static.data';
 import { postService } from '@services/api/post/post.services';
@@ -14,10 +13,17 @@ import { Utils } from '@services/utils/Utils.services';
 import { clearPost, updatePostItem } from '@store/reducer/post';
 import { AxiosError } from 'axios';
 import { timeAgo } from '@services/utils/timeAgo.utils';
+import PostCommentSection from '../post-comment-section/PostCommentSection';
+import ReactionsModal from '../reactions/reaction-model/ReactionModal';
+import { ImageUtils } from '@services/utils/image.utils';
+import CommentInputBox from '../comments/comment-inputs/CommentInput';
+import CommentsModal from '../comments/comment-modal/CommentModal';
+import ImageModal from '@components/image-modal/ImageModal';
+import Dialog from '@components/dialog/Dialog';
 
 interface PostProps {
   post?: any;
-  showIcons?: any;
+  showIcons?: boolean;
 }
 
 const Post: React.FC<PostProps> = ({ post, showIcons }) => {
@@ -45,7 +51,7 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
     try {
       const response: any = await postService.deletePost(`${_id}`);
       if (response) {
-        Utils.addNotification(dispatch, { type: 'success', description: response.data.message });
+        Utils.addNotification(dispatch, { type: 'success', description: response.data?.message });
         dispatch(toggleDeleteDialog({ toggle: !deleteDialogIsOpen, data: '' }));
         dispatch(clearPost());
       }
@@ -73,8 +79,8 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
     } else if (post?.gifUrl && post.bgColor === '#ffffff') {
       imageUrl = post?.gifUrl;
     }
-    // const bgColor = await ImageUtils.getBackgroundImageColor(imageUrl);
-    // setBackgroundImageColor(bgColor);
+    const bgColor = await ImageUtils.getBackgroundImageColor(imageUrl);
+    setBackgroundImageColor(`${bgColor}`);
   };
 
   useEffect(() => {
@@ -83,23 +89,23 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
 
   return (
     <>
-      {/* {reactionsModalIsOpen && <ReactionsModal />}
-      {commentsModalIsOpen && <CommentsModal />} */}
-      {/* {showImageModal && (
-        <ImageModal image={`${imageUrl}`} onCancel={() => setShowImageModal(!showImageModal)} showArrow={false} />
-      )} */}
-      {/* {deleteDialogIsOpen && (
+      {reactionsModalIsOpen && <ReactionsModal />}
+      {commentsModalIsOpen && <CommentsModal />}
+      {showImageModal && (
+        <ImageModal image={imageUrl} onCancel={() => setShowImageModal(!showImageModal)} showArrow={false} />
+      )}
+      {deleteDialogIsOpen && (
         <Dialog
           title="Are you sure you want to delete this post?"
           firstButtonText="Delete"
           secondButtonText="Cancel"
           firstBtnHandler={() => deletePost()}
           secondBtnHandler={() => {
-            dispatch(toggleDeleteDialog({ toggle: !deleteDialogIsOpen,data:''}));
+            dispatch(toggleDeleteDialog({ toggle: !deleteDialogIsOpen, data: '' }));
             dispatch(clearPost());
           }}
         />
-      )} */}
+      )}
       <div className="post-body" data-testid="post">
         <div className="user-post-data">
           <div className="user-post-data-wrap">
@@ -202,17 +208,14 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
                 </div>
               )}
               {(post?.reactions.length > 0 || post?.commentsCount > 0) && <hr />}
-              {/* <PostCommentSection post={post} /> */}
+              <PostCommentSection post={post} />
             </div>
           </div>
-          {/* {selectedPostId === post?._id && <CommentInputBox post={post} />} */}
+          {selectedPostId === post?._id && <CommentInputBox post={post} />}
         </div>
       </div>
     </>
   );
 };
-Post.propTypes = {
-  post: PropTypes.object.isRequired,
-  showIcons: PropTypes.bool
-};
+
 export default Post;

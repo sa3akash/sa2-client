@@ -14,7 +14,7 @@ export interface SinglePostDoc {
   username?: string;
   email?: string;
   avatarColor?: string;
-  commentsCount?: string;
+  commentsCount?: number;
   reactions?: any[];
   imgVersion?: string;
   imgId?: string;

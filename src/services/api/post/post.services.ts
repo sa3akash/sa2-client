@@ -39,22 +39,22 @@ class PostService {
   }
 
   async getReactionsByUsername(username: string) {
-    const response: ResponseType = await api.get(`/post/reactions/username/${username}`);
+    const response: ResponseType = await api.get(`/reactions/${username}`);
     return response;
   }
 
   async getPostReactions(postId: string) {
-    const response: ResponseType = await api.get(`/post/reactions/${postId}`);
+    const response: ResponseType = await api.get(`/reaction/${postId}`);
     return response;
   }
 
   async getSinglePostReactionByUsername(postId: string, username: string) {
-    const response: ResponseType = await api.get(`/post/single/reaction/username/${username}/${postId}`);
+    const response: ResponseType = await api.get(`/reaction/${postId}/${username}`);
     return response;
   }
 
   async getPostCommentsNames(postId: string) {
-    const response: ResponseType = await api.get(`/post/commentsnames/${postId}`);
+    const response: ResponseType = await api.get(`/post/comments-name/${postId}`);
     return response;
   }
 
@@ -74,19 +74,22 @@ class PostService {
   }
 
   async addReaction(body: any) {
-    const response: ResponseType = await api.post('/post/reaction', body);
+    const response: ResponseType = await api.post('/reaction/add', body);
     return response;
   }
 
   async removeReaction(postId: string, previousReaction: string, postReactions: any) {
-    const response: ResponseType = await api.delete(
-      `/post/reaction/${postId}/${previousReaction}/${JSON.stringify(postReactions)}`
-    );
+    const body = {
+      postId,
+      previousReaction,
+      postReactions
+    };
+    const response: ResponseType = await api.delete('/reaction/remove', { data: body });
     return response;
   }
 
   async addComment(body: any) {
-    const response: ResponseType = await api.post('/post/comment', body);
+    const response: ResponseType = await api.post('/post/comments', body);
     return response;
   }
 

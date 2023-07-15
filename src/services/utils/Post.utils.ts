@@ -14,7 +14,7 @@ export class PostUtils {
     setPostData(postData);
   }
 
-  static postInputEditable(textContent: any, postData: any, setPostData: any, setDisabled: any) {
+  static postInputEditable(textContent: any, postData: any, setPostData: any, setDisabled?: any) {
     postData.post = textContent;
     setPostData(postData);
     setDisabled(false);
@@ -138,15 +138,15 @@ export class PostUtils {
     setLoading: any,
     dispatch: AppDispatch
   ) {
-    // const response = await postService.updatePost(postId, postData);
-    // if (response) {
-    //   PostUtils.dispatchNotification(response.data.message, 'success', setApiResponse, setLoading, dispatch);
-    //   setTimeout(() => {
-    //     setApiResponse('success');
-    //     setLoading(false);
-    //   }, 3000);
-    //   PostUtils.closePostModal(dispatch);
-    // }
+    const response: any = await postService.updatePost(postId, postData);
+    if (response) {
+      PostUtils.dispatchNotification(response.data.message, 'success', setApiResponse, dispatch);
+      setTimeout(() => {
+        setApiResponse('success');
+        setLoading(false);
+      }, 3000);
+      PostUtils.closePostModal(dispatch);
+    }
   }
 
   static checkPrivacy(post: any, profile: any, following: any) {
@@ -189,7 +189,7 @@ export class PostUtils {
       }
     });
 
-    socketService?.socket?.on('update-like', (reactionData) => {
+    socketService.socket.on('update-reaction', (reactionData) => {
       const postData = find(posts, (post) => post._id === reactionData?.postId);
       if (postData) {
         postData.reactions = reactionData.postReactions;
@@ -197,7 +197,7 @@ export class PostUtils {
       }
     });
 
-    socketService?.socket?.on('update-comment', (commentData) => {
+    socketService.socket.on('update-comment', (commentData) => {
       const postData = find(posts, (post) => post._id === commentData?.postId);
       if (postData) {
         postData.commentsCount = commentData.commentsCount;

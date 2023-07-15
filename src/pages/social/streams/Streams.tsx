@@ -12,8 +12,10 @@ import { AxiosError } from 'axios';
 import { Utils } from '@services/utils/Utils.services';
 import { getPosts } from '@store/api';
 import { ThunkDispatch } from '@reduxjs/toolkit';
-import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import { PostUtils } from '@services/utils/Post.utils';
+import { addReactions } from '@store/reducer/userPostReaction';
+import useLocalStorage from '@hooks/useLocalStorage';
+import useScrollContainer from '@hooks/useScroll';
 
 const Streams = () => {
   const allPosts = useSelector((state: RootState) => state.allPosts);
@@ -24,6 +26,9 @@ const Streams = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPostsCount, setTotalPostsCount] = useState(0);
 
+  const storedUsername = useLocalStorage('username', 'get');
+  const [deleteSelectedPostId] = useLocalStorage('selectedPostId', 'delete');
+
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -31,7 +36,8 @@ const Streams = () => {
 
   const appPosts = useRef<any>();
 
-  useInfiniteScroll(bodyRef, bottomLineRef, fetchPostData);
+  // useInfiniteScroll(bodyRef, bottomLineRef, fetchPostData);
+  useScrollContainer(bodyRef, fetchPostData);
 
   const PAGE_SIZE = 11;
 
@@ -72,20 +78,20 @@ const Streams = () => {
   };
 
   const getReactionsByUsername = async () => {
-    // try {
-    //   const response = await postService.getReactionsByUsername(storedUsername);
-    //   dispatch(addReactions(response.data.reactions));
-    // } catch (error) {
-    //   if(error instanceof AxiosError){
-    //     Utils.addNotification(dispatch ,{type:'error', description:error.response?.data.message});
-    //   }
-    // }
+    try {
+      const response: any = await postService.getReactionsByUsername(storedUsername);
+      dispatch(addReactions(response.data?.reactions));
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
+      }
+    }
   };
 
   useEffectOnce(() => {
     // getUserFollowing();
-    // getReactionsByUsername();
-    // deleteSelectedPostId();
+    getReactionsByUsername();
+    deleteSelectedPostId();
     dispatch(getPosts());
     // dispatch(getUserSuggestions());
   });

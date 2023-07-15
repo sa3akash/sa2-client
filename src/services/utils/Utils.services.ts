@@ -5,7 +5,7 @@ import { AppDispatch } from '@store/index';
 import { UserDoc } from '@store/reducer/interfaces';
 import { clearNotification, setNotification } from '@store/reducer/notifications';
 import { ToastDoc } from '@components/toast/Toast';
-import { Dispatch, SetStateAction } from 'react';
+import millify from 'millify';
 
 export class Utils {
   static avatarColor() {
@@ -88,7 +88,7 @@ export class Utils {
     return `https://res.cloudinary.com/${import.meta.env.VITE_CLOUD_NAME}/image/upload/v${version}/${id}`;
   }
 
-  static getVideo(videoId: any, videoVersion: any) {
+  static getVideo(videoId: string, videoVersion: string) {
     throw new Error('Method not implemented.');
   }
   static getImage(imgId: any, imgVersion: any): string {
@@ -103,13 +103,35 @@ export class Utils {
     return some(userFollowers, (user) => user._id === postCreatorId || postCreatorId === userId);
   }
 
-  static checkIfUserIsOnline(username: any, onlineUsers: any) {
+  static checkIfUserIsOnline(username: string, onlineUsers: any) {
     return some(onlineUsers, (user) => user === username?.toLowerCase());
   }
 
-  static firstLetterUpperCase(word: any) {
+  static firstLetterUpperCase(word: string) {
     if (!word) return '';
     return `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
+  }
+
+  static shortenLargeNumbers(data: number) {
+    if (data === undefined) {
+      return 0;
+    } else {
+      return millify(data);
+    }
+  }
+
+  static formattedReactions(reactions: any[]) {
+    const postReactions = [];
+    for (const [key, value] of Object.entries(reactions)) {
+      if (value > 0) {
+        const reactionObject = {
+          type: key,
+          value
+        };
+        postReactions.push(reactionObject);
+      }
+    }
+    return postReactions;
   }
 }
 

@@ -1,47 +1,34 @@
-import Button from '@components/button/Button';
-import PostWrapper from '@components/posts/model-wrappers/postWrapper/PostWrapper';
-import { RootState } from '@store/index';
-import { closeModel, toggleGifModal } from '@store/reducer/model';
-import { useState, useEffect, useRef } from 'react';
-import { FaArrowLeft, FaTimes } from 'react-icons/fa';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import '@components/posts/post-model/edit-post/editPost.scss';
 
-import '@components/posts/post-model/addPost/addPost.scss';
-import ModalBoxContent from '../post-model-box/PostModelBox';
-import { bgColors } from '@services/utils/Static.data';
-import ModalBoxSelection from '../post-model-box/PostModelSelection';
+import { FaArrowLeft, FaTimes } from 'react-icons/fa';
+
+import Spinner from '@components/spinner/Spinner';
+import { find } from 'lodash';
+import { RootState } from '@store/index';
 import { PostUtils } from '@services/utils/Post.utils';
-import Giphy from '@components/giffy/Giffy';
-import { postService } from '@services/api/post/post.services';
+import { bgColors, feelingsList } from '@services/utils/Static.data';
+import { addPostFeeling, closeModel, toggleGifModal } from '@store/reducer/model';
+import { Utils } from '@services/utils/Utils.services';
 import { ImageUtils } from '@services/utils/image.utils';
 import { AxiosError } from 'axios';
+import PostWrapper from '@components/posts/model-wrappers/postWrapper/PostWrapper';
+import ModalBoxContent from '../post-model-box/PostModelBox';
+import ModalBoxSelection from '../post-model-box/PostModelSelection';
+import Button from '@components/button/Button';
+import Giphy from '@components/giffy/Giffy';
 
-interface AddPostProps {
-  selectedImage?: File | null | undefined;
-  selectedPostVideo?: File | null | undefined;
-}
-
-interface PostDataDoc {
-  post: string;
-  bgColor: string;
-  privacy: string;
-  feelings: string;
-  gifUrl: string;
-  profilePicture: string;
-  image: string | unknown | undefined;
-  video: string;
-}
-
-const AddPost = ({ selectedImage }: AddPostProps) => {
+const EditPost = () => {
   const { gifModalIsOpen, feeling } = useSelector((state: RootState) => state.model);
-  const { gifUrl, image, privacy } = useSelector((state: RootState) => state.post);
-
+  const { post } = useSelector((state: RootState) => state);
   const { profile } = useSelector((state: RootState) => state.user);
-  const [loading, setLoading] = useState(false);
-  const [hasVideo, setHasVideo] = useState(false);
-  const [postImage, setPostImage] = useState('');
-  const [textAreaBackground, setTextAreaBackground] = useState('#ffffff');
-  const [postData, setPostData] = useState<PostDataDoc>({
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hasVideo, setHasVideo] = useState<boolean>(false);
+  const [postImage, setPostImage] = useState<string>('');
+  const [allowedNumberOfCharacters] = useState<string>('100/100');
+  const [textAreaBackground, setTextAreaBackground] = useState<string>('#ffffff');
+  const [postData, setPostData] = useState({
     post: '',
     bgColor: textAreaBackground,
     privacy: '',
@@ -49,19 +36,16 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
     gifUrl: '',
     profilePicture: '',
     image: '',
-    video: ''
+    imgId: '',
+    imgVersion: ''
   });
-
-  const [disable, setDisable] = useState(true);
-
-  const [apiResponse, setApiResponse] = useState('');
+  const [disable, setDisable] = useState<boolean>(true);
+  const [apiResponse, setApiResponse] = useState<string>('');
   const [selectedPostImage, setSelectedPostImage] = useState<File | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
-
   const counterRef = useRef<any>(null);
-  const inputRef = useRef<HTMLDivElement | null>(null);
-
-  const imageInputRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<any>(null);
+  const imageInputRef = useRef<any>(null);
 
   const dispatch = useDispatch();
 
@@ -74,11 +58,8 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
   const postInputEditable = (event: any, textContent: any) => {
     const currentTextLength = event.target.textContent.length;
     const counter = maxNumberOfCharacters - currentTextLength;
-
     counterRef.current.textContent = `${counter}/100`;
-
     setDisable(currentTextLength <= 0 && !postImage);
-
     PostUtils.postInputEditable(textContent, postData, setPostData, setDisable);
   };
 
@@ -95,108 +76,162 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
 
   const clearImage = () => {
     setSelectedVideo(null);
-    PostUtils.clearImage(postData, '', inputRef, dispatch, setSelectedPostImage, setPostImage, setPostData);
+    setHasVideo(false);
+    PostUtils.clearImage(postData, post?.post, inputRef, dispatch, setSelectedPostImage, setPostImage, setPostData);
   };
 
-  //
-  //  create a new post
-  //
+  const getFeeling = useCallback(
+    (name: string) => {
+      const feeling = find(feelingsList, (data) => data.name === name);
+      dispatch(addPostFeeling(feeling));
+    },
+    [dispatch]
+  );
 
-  const createPost = async () => {
+  const postInputData = useCallback(() => {
+    setTimeout(() => {
+      if (imageInputRef?.current) {
+        postData.post = `${post.post}`;
+        imageInputRef.current.textContent = post?.post;
+        setPostData(postData);
+      }
+    });
+  }, [post, postData]);
+
+  const editableFields = useCallback(() => {
+    if (post?.feelings) {
+      getFeeling(post?.feelings);
+    }
+
+    if (post?.bgColor) {
+      postData.bgColor = post?.bgColor;
+      setPostData(postData);
+      setTextAreaBackground(post?.bgColor);
+      setTimeout(() => {
+        if (inputRef?.current) {
+          postData.post = `${post?.post}`;
+          inputRef.current.textContent = post?.post;
+          setPostData(postData);
+        }
+      });
+    }
+
+    if (post?.gifUrl && !post?.imgId) {
+      postData.gifUrl = post?.gifUrl;
+      postData.imgId = '';
+      postData.imgVersion = '';
+      postData.image = '';
+      setPostImage(post?.gifUrl);
+      setHasVideo(false);
+      postInputData();
+    }
+
+    if (post?.imgId && !post?.gifUrl) {
+      postData.imgId = post?.imgId;
+      postData.imgVersion = `${post?.imgVersion}`;
+      const imageUrl = Utils.getImage(post?.imgId, post?.imgVersion);
+      setPostImage(imageUrl);
+      setHasVideo(false);
+      postInputData();
+    }
+
+    if (!post?.imgId && !post?.gifUrl) {
+      postData.imgId = '';
+      postData.imgVersion = '';
+      postData.image = '';
+      // const videoUrl = Utils.getVideo(post?.videoId, post?.videoVersion);
+      // setHasVideo(true);
+      postInputData();
+    }
+  }, [post, postData, getFeeling, postInputData]);
+
+  const updatePost = async () => {
     setLoading(!loading);
     setDisable(!disable);
     try {
       if (Object.keys(feeling).length) {
-        postData.feelings = feeling.name;
+        postData.feelings = feeling?.name;
       }
-      postData.privacy = privacy || 'Public';
-      postData.gifUrl = gifUrl || '';
-      postData.profilePicture = profile?.profilePicture || '';
-
-      if (selectedPostImage || selectedImage) {
+      if (postData.gifUrl || (postData.imgId && postData.imgVersion)) {
+        postData.bgColor = '#ffffff';
+      }
+      postData.privacy = post?.privacy || 'Public';
+      postData.profilePicture = `${profile?.profilePicture}`;
+      if (selectedPostImage || selectedVideo) {
         let result;
         if (selectedPostImage) {
           result = await ImageUtils.readAsBase64(selectedPostImage);
         }
-
-        if (selectedImage) {
-          result = await ImageUtils.readAsBase64(selectedImage);
+        if (selectedVideo) {
+          result = await ImageUtils.readAsBase64(selectedVideo);
         }
-        // if (selectedVideo) {
-        //   result = await ImageUtils.readAsBase64(selectedVideo);
-        // }
-
-        // if (selectedPostVideo) {
-        //   result = await ImageUtils.readAsBase64(selectedPostVideo);
-        // }
-
-        const type = selectedPostImage || selectedImage ? 'image' : 'video';
+        const type = selectedPostImage ? 'image' : 'video';
         if (type === 'image') {
-          postData.image = result;
-          // postData.video = '';
+          postData.image = `${result}`;
         } else {
-          // postData.video = result;
           postData.image = '';
+          // postData.video = result;
         }
-        const response: any = await PostUtils.sendPostWithFileRequest(
-          type,
-          postData,
-          imageInputRef,
-          setApiResponse,
-          setLoading,
-          dispatch
-        );
-        if (response && response.data?.message) {
-          setHasVideo(false);
+        postData.gifUrl = '';
+        postData.imgId = '';
+        postData.imgVersion = '';
 
-          PostUtils.closePostModal(dispatch);
-        }
+        await PostUtils.sendUpdatePostWithFileRequest(type, post?._id, postData, setApiResponse, setLoading, dispatch);
       } else {
-        const response = await postService.createPost(postData);
-        if (response) {
-          setApiResponse('success');
-          setLoading(false);
-          setHasVideo(false);
-          PostUtils.closePostModal(dispatch);
-        }
+        setHasVideo(false);
+        await PostUtils.sendUpdatePostRequest(post?._id, postData, setApiResponse, setLoading, dispatch);
       }
     } catch (error) {
       setHasVideo(false);
       if (error instanceof AxiosError) {
         PostUtils.dispatchNotification(error.response?.data.message, 'error', setApiResponse, dispatch);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
-  //
-  //  create a new post
-  //
-
   useEffect(() => {
     PostUtils.positionCursor('editable');
+  }, [post]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (imageInputRef?.current && imageInputRef?.current.textContent.length) {
+        counterRef.current.textContent = `${maxNumberOfCharacters - imageInputRef?.current.textContent.length}/100`;
+      } else if (inputRef?.current && inputRef?.current.textContent.length) {
+        counterRef.current.textContent = `${maxNumberOfCharacters - inputRef?.current.textContent.length}/100`;
+      }
+    });
   }, []);
 
   useEffect(() => {
     if (!loading && apiResponse === 'success') {
       dispatch(closeModel());
     }
-    setDisable(postData.post.length <= 0 && !postImage);
-  }, [loading, dispatch, apiResponse, postData, postImage]);
+    // setDisable( post?.post && post?.post?.length <= 0 && !postImage);
+  }, [loading, dispatch, apiResponse, post, postImage]);
 
-  // set post image
   useEffect(() => {
-    if (gifUrl) {
-      setPostImage(gifUrl);
+    if (post?.gifUrl) {
+      postData.image = '';
+
+      setSelectedPostImage(null);
+      setSelectedVideo(null);
       setHasVideo(false);
-      PostUtils.postInputData(imageInputRef, postData, '', setPostData);
-    } else if (image) {
-      setPostImage(image);
+      setPostImage(post?.gifUrl);
+      PostUtils.postInputData(imageInputRef, postData, post?.post, setPostData);
+    } else if (post?.image) {
+      setPostImage(post?.image);
       setHasVideo(false);
-      PostUtils.postInputData(imageInputRef, postData, '', setPostData);
+      PostUtils.postInputData(imageInputRef, postData, post?.post, setPostData);
     }
-  }, [gifUrl, image, postData]);
+    // else if (post?.video) {
+
+    //   // setPostImage(post?.video);
+    //   setHasVideo(true);
+    //   PostUtils.postInputData(imageInputRef, postData, post?.post, setPostData);
+    // }
+    editableFields();
+  }, [editableFields, post, postData]);
 
   return (
     <>
@@ -206,26 +241,22 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
           <div
             className="modal-box"
             style={{
-              height:
-                selectedPostImage || hasVideo || gifUrl || image || postData?.gifUrl || postData?.image
-                  ? '700px'
-                  : 'auto'
+              height: selectedPostImage || hasVideo || post?.gifUrl || post?.imgId ? '700px' : 'auto'
             }}
           >
             {loading && (
               <div className="modal-box-loading" data-testid="modal-box-loading">
-                <span>Posting...</span>
-                {/* <Spinner /> */}
+                <span>Updating post...</span>
+                <Spinner />
               </div>
             )}
             <div className="modal-box-header">
-              <h2>Create Post</h2>
-              <button disabled={loading} className="modal-box-header-cancel" onClick={() => closePostModal()}>
+              <h2>Edit Post</h2>
+              <button className="modal-box-header-cancel" onClick={() => closePostModal()}>
                 X
               </button>
             </div>
             <hr />
-
             <ModalBoxContent />
 
             {!postImage && (
@@ -242,7 +273,7 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
                         id="editable"
                         ref={(el) => {
                           inputRef.current = el;
-                          inputRef.current?.focus();
+                          inputRef?.current?.focus();
                         }}
                         className={`editable flex-item ${textAreaBackground !== '#ffffff' ? 'textInputColor' : ''} ${
                           postData.post.length === 0 && textAreaBackground !== '#ffffff' ? 'defaultInputTextColor' : ''
@@ -274,22 +305,19 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
                     onKeyDown={onKeyDown}
                     data-placeholder="What's on your mind?..."
                   ></div>
-
                   <div className="image-display">
                     <div
                       className="image-delete-btn"
                       data-testid="image-delete-btn"
-                      style={{ marginTop: `${hasVideo ? '-40px' : ''}` }}
+                      style={{ marginTop: hasVideo ? '-40px' : '0px' }}
                       onClick={() => clearImage()}
                     >
                       <FaTimes />
                     </div>
-
                     {!hasVideo && <img data-testid="post-image" className="post-image" src={`${postImage}`} alt="" />}
-
                     {hasVideo && (
                       <div style={{ marginTop: '-40px' }}>
-                        <video width="100%" controls src="/video.mp4" />
+                        <video width="100%" controls src={`${postImage}`} />
                       </div>
                     )}
                   </div>
@@ -314,27 +342,22 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
               </ul>
             </div>
             <span className="char_count" data-testid="allowed-number" ref={counterRef}>
-              100/100
+              {allowedNumberOfCharacters}
             </span>
 
             <ModalBoxSelection setSelectedPostImage={setSelectedPostImage} setSelectedVideo={setSelectedVideo} />
 
-            <div className="modal-box-button" data-testid="post-button">
-              <Button
-                label="Create Post"
-                className="post-button"
-                disabled={disable || loading}
-                handleClick={createPost}
-              />
+            <div className="modal-box-button" data-testid="edit-button">
+              <Button label="Update" className="post-button" disabled={disable} handleClick={updatePost} />
             </div>
           </div>
         )}
         {gifModalIsOpen && (
           <div className="modal-giphy" data-testid="modal-giphy">
             <div className="modal-giphy-header">
-              <div onClick={() => dispatch(toggleGifModal(!gifModalIsOpen))} style={{ cursor: 'pointer' }}>
+              <span className="back-button" onClick={() => dispatch(toggleGifModal(!gifModalIsOpen))}>
                 <FaArrowLeft />
-              </div>
+              </span>
               <h2>Choose a GIF</h2>
             </div>
             <hr />
@@ -346,4 +369,4 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
   );
 };
 
-export default AddPost;
+export default EditPost;

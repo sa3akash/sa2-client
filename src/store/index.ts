@@ -5,6 +5,7 @@ import notificatonSlice from '@store/reducer/notifications';
 import modelSlice from '@store/reducer/model';
 import postsSlice from '@store/reducer/posts';
 import postSlice from '@store/reducer/post';
+import reactionSlice from '@store/reducer/userPostReaction';
 export const store = configureStore({
   reducer: {
     user: userSlice,
@@ -12,7 +13,8 @@ export const store = configureStore({
     notification: notificatonSlice,
     model: modelSlice,
     allPosts: postsSlice,
-    post: postSlice
+    post: postSlice,
+    userReactions: reactionSlice
   }
 });
 

@@ -10,6 +10,7 @@ import feelingImg from '@assets/images/feeling.png';
 import { openModel, toggleFeelingModal, toggleGifModal, toggleImageModal } from '@store/reducer/model';
 import AddPost from '../post-model/addPost/AddPost';
 import { ImageUtils } from '@services/utils/image.utils';
+import EditPost from '../post-model/edit-post/EditPost';
 
 const PostForm = () => {
   const { profile } = useSelector((state: RootState) => state.user);
@@ -106,7 +107,7 @@ const PostForm = () => {
       </div>
 
       {isOpen && type === 'add' && <AddPost selectedImage={selectedPostImage} />}
-      {/* {isOpen && type === 'edit' && <EditPost />} */}
+      {isOpen && type === 'edit' && <EditPost />}
     </>
   );
 };

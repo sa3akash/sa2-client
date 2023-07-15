@@ -1,7 +1,6 @@
 import { NotificationDoc } from '@pages/social/notifications/Notifications';
 import { notificationServices } from '@services/api/notification/notification.services';
 import { socketService } from '@services/sockets/socket.services';
-import { UserDoc } from '@store/reducer/interfaces';
 import { cloneDeep, find, findIndex, remove, sumBy } from 'lodash';
 import { Utils } from './Utils.services';
 import { timeAgo } from './timeAgo.utils';

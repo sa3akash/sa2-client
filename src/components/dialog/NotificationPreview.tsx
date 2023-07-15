@@ -1,3 +1,4 @@
+import React from 'react';
 import Button from '@components/button/Button';
 
 import loveR from '@assets/reactions/love.png';
@@ -7,7 +8,7 @@ import likeR from '@assets/reactions/like.png';
 import sadR from '@assets/reactions/sad.png';
 import wowR from '@assets/reactions/wow.png';
 
-import '@components/dialog/dialogPrevies.scss';
+import '@components/dialog/notificationPreview.scss';
 
 interface NotificationPreviewProps {
   post: string;
@@ -20,7 +21,7 @@ interface NotificationPreviewProps {
   secondBtnHandler: () => void;
 }
 
-const NotificationPreview = ({
+const NotificationPreview: React.FC<NotificationPreviewProps> = ({
   title,
   post,
   imgUrl,
@@ -29,7 +30,7 @@ const NotificationPreview = ({
   senderName,
   secondButtonText,
   secondBtnHandler
-}: NotificationPreviewProps) => {
+}) => {
   return (
     <>
       <div className="notification-preview-container" data-testid="notification-preview">

@@ -6,7 +6,7 @@ interface InputInterfacts {
   type?: string;
   id?: string;
   labelText?: string;
-  value?: any;
+  value?: string;
   className?: string;
   placeholder?: string;
   handleChange?: React.ChangeEventHandler<HTMLInputElement>;
