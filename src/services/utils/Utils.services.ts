@@ -99,12 +99,12 @@ export class Utils {
     return some(blocked, (id) => id === userId);
   }
 
-  static checkIfUserIsFollowed(userFollowers: any, postCreatorId: any, userId: any) {
+  static checkIfUserIsFollowed(userFollowers: any, postCreatorId: any, userId?: any) {
     return some(userFollowers, (user) => user._id === postCreatorId || postCreatorId === userId);
   }
 
-  static checkIfUserIsOnline(username: string, onlineUsers: any) {
-    return some(onlineUsers, (user) => user === username?.toLowerCase());
+  static checkIfUserIsOnline(username: string, onlineUsers: any[]) {
+    return some(onlineUsers, (user) => user === username.toLowerCase());
   }
 
   static firstLetterUpperCase(word: string) {

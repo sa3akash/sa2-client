@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import ProtectedRoute from '@pages/protectedRoutes';
 import StreamsSkeleton from '@pages/social/streams/StreamsSkeleton';
 import NotificationSkeleton from '@pages/social/notifications/NotificationSkeleton';
+import CardSkeleton from '@components/cart-eliments/CardSkeleton';
 
 const AuthTabs = lazy(() => import('@pages/auth').then((module) => ({ default: module.AuthTabs })));
 const ForgotPassword = lazy(() => import('@pages/auth').then((module) => ({ default: module.ForgotPassword })));
@@ -75,7 +76,7 @@ export const AppRouter = () => {
         {
           path: 'people',
           element: (
-            <Suspense>
+            <Suspense fallback={<CardSkeleton />}>
               <People />
             </Suspense>
           )
