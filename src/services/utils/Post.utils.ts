@@ -3,8 +3,8 @@ import { cloneDeep, find, findIndex, remove } from 'lodash';
 import { AppDispatch } from '@store/index';
 import { clearPost, updatePostItem } from '@store/reducer/post';
 import { postService } from '@services/api/post/post.services';
-import { AxiosError, AxiosResponse, ResponseType } from 'axios';
-import { Utils } from './Utils.services';
+import { AxiosError } from 'axios';
+import { Utils } from '@services/utils/Utils.services';
 import { socketService } from '@services/sockets/socket.services';
 
 export class PostUtils {

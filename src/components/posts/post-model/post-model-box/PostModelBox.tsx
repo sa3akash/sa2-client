@@ -51,7 +51,8 @@ const ModalBoxContent = () => {
         </h5>
         {feeling?.name && (
           <p className="inline-display" data-testid="box-feeling">
-            is feeling <img className="feeling-icon" src={`${feeling?.image}`} alt="" /> <span>{feeling?.name}</span>
+            is feeling <img loading="lazy" className="feeling-icon" src={`${feeling?.image}`} alt="" />{' '}
+            <span>{feeling?.name}</span>
           </p>
         )}
         <div

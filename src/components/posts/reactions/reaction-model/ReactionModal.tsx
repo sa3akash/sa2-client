@@ -85,7 +85,7 @@ const ReactionsModal = () => {
                 }}
                 onClick={() => reactionList(reaction?.type)}
               >
-                <img src={`${reactionsMap[reaction?.type as keyof ReactObject]}`} alt="" />
+                <img loading="lazy" src={`${reactionsMap[reaction?.type as keyof ReactObject]}`} alt="" />
                 <span>{Utils.shortenLargeNumbers(reaction?.value)}</span>
               </li>
             ))}

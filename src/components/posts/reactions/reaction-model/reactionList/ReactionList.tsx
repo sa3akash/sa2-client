@@ -16,7 +16,12 @@ const ReactionList = ({ postReactions }: { postReactions: any[] }) => {
               size={50}
               avatarSrc={reaction?.profilePicture}
             />
-            <img src={`${reactionsMap[reaction?.type as keyof ReactObject]}`} alt="" className="reaction-icon" />
+            <img
+              loading="lazy"
+              src={`${reactionsMap[reaction?.type as keyof ReactObject]}`}
+              alt=""
+              className="reaction-icon"
+            />
           </div>
           <span>{reaction?.username}</span>
         </div>

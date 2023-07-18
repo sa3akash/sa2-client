@@ -52,7 +52,7 @@ const Giphy = () => {
                 key={index}
                 onClick={() => selectGif(gif.images.original.url)}
               >
-                <img style={{ width: '470px' }} src={`${gif.images.original.url}`} alt="" />
+                <img loading="lazy" style={{ width: '470px' }} src={`${gif.images.original.url}`} alt="" />
               </li>
             ))}
           </ul>

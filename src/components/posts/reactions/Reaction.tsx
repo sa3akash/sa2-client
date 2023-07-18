@@ -19,7 +19,7 @@ const Reactions = ({ handleClick, showLabel = true }: { handleClick: any; showLa
         {reactionList.map((reaction, index) => (
           <li key={index} onClick={() => handleClick(reaction)} data-testid="reaction">
             {showLabel && <label>{reaction}</label>}
-            <img src={reactionsMap[reaction as keyof ReactObject]} alt="" />
+            <img loading="lazy" src={reactionsMap[reaction as keyof ReactObject]} alt="" />
           </li>
         ))}
       </ul>

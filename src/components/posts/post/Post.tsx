@@ -33,7 +33,7 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
   );
   const [showImageModal, setShowImageModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const [backgroundImageColor, setBackgroundImageColor] = useState('');
+  const [backgroundImageColor, setBackgroundImageColor] = useState<string>('');
   const selectedPostId = useLocalStorage('selectedPostId', 'get');
   const dispatch = useDispatch();
 
@@ -124,7 +124,13 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
                   {post?.username}
                   {post?.feelings && (
                     <div className="inline-display" data-testid="inline-display">
-                      is feeling <img className="feeling-icon" src={`${getFeeling(post?.feelings)}`} alt="feelingImg" />
+                      is feeling{' '}
+                      <img
+                        className="feeling-icon"
+                        loading="lazy"
+                        src={`${getFeeling(post?.feelings)}`}
+                        alt="feelingImg"
+                      />
                       <div>{post?.feelings}</div>
                     </div>
                   )}
@@ -175,6 +181,7 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
                     style={{ objectFit: 'contain' }}
                     src={`${Utils.getImage(post.imgId, post.imgVersion)}`}
                     alt=""
+                    loading="lazy"
                   />
                 </div>
               )}
@@ -204,7 +211,13 @@ const Post: React.FC<PostProps> = ({ post, showIcons }) => {
                     setShowImageModal(!showImageModal);
                   }}
                 >
-                  <img className="post-image" style={{ objectFit: 'contain' }} src={`${post?.gifUrl}`} alt="" />
+                  <img
+                    className="post-image"
+                    loading="lazy"
+                    style={{ objectFit: 'contain' }}
+                    src={`${post?.gifUrl}`}
+                    alt=""
+                  />
                 </div>
               )}
               {(post?.reactions.length > 0 || post?.commentsCount > 0) && <hr />}

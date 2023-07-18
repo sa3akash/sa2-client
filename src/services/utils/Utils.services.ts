@@ -1,4 +1,4 @@
-import { floor, random, some } from 'lodash';
+import { findIndex, floor, random, some } from 'lodash';
 import { avatarColors } from '@services/utils/Static.data';
 import { addProfile, clearProfile } from '@store/reducer/user.reducer';
 import { AppDispatch } from '@store/index';
@@ -132,6 +132,23 @@ export class Utils {
       }
     }
     return postReactions;
+  }
+
+  static removeUserFromList(list: any[], userId: any) {
+    const index = findIndex(list, (id) => id === userId);
+    list.splice(index, 1);
+    return list;
+  }
+
+  static checkUrl(url: any, word: any) {
+    return url.includes(word);
+  }
+
+  static renameFile(element: any) {
+    const fileName = element.name.split('.').slice(0, -1).join('.');
+    const blob = element.slice(0, element.size, '/image/png');
+    const newFile = new File([blob], `${fileName}.png`, { type: '/image/png' });
+    return newFile;
   }
 }
 

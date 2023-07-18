@@ -93,13 +93,13 @@ const PostForm = () => {
                   }}
                   handleChange={handleImageFileChange}
                 />
-                <img src={photoImg} alt="photo" /> Photo
+                <img loading="lazy" src={photoImg} alt="photo" /> Photo
               </li>
               <li className="post-form-list-item" onClick={openGifModal}>
-                <img src={gifImg} alt="gif" /> Gif
+                <img loading="lazy" src={gifImg} alt="gif" /> Gif
               </li>
               <li className="post-form-list-item" onClick={openFeelingsComponent}>
-                <img src={feelingImg} alt="feeling" /> Feeling
+                <img loading="lazy" src={feelingImg} alt="feeling" /> Feeling
               </li>
             </ul>
           </div>

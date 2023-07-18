@@ -285,7 +285,9 @@ const AddPost = ({ selectedImage }: AddPostProps) => {
                       <FaTimes />
                     </div>
 
-                    {!hasVideo && <img data-testid="post-image" className="post-image" src={`${postImage}`} alt="" />}
+                    {!hasVideo && (
+                      <img data-testid="post-image" loading="lazy" className="post-image" src={`${postImage}`} alt="" />
+                    )}
 
                     {hasVideo && (
                       <div style={{ marginTop: '-40px' }}>

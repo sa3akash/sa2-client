@@ -16,6 +16,7 @@ import { PostUtils } from '@services/utils/Post.utils';
 import { addReactions } from '@store/reducer/userPostReaction';
 import useLocalStorage from '@hooks/useLocalStorage';
 import useScrollContainer from '@hooks/useScroll';
+import { followerService } from '@services/api/followers/followers.services';
 
 const Streams = () => {
   const allPosts = useSelector((state: RootState) => state.allPosts);
@@ -67,14 +68,14 @@ const Streams = () => {
   };
 
   const getUserFollowing = async () => {
-    // try {
-    //   const response = await followerService.getUserFollowing();
-    //   setFollowing(response.data.following);
-    // } catch (error) {
-    //   if(error instanceof AxiosError){
-    //     Utils.addNotification(dispatch ,{type:'error', description:error.response?.data.message});
-    //   }
-    // }
+    try {
+      const response = await followerService.getUserFollowing();
+      setFollowing(response.data.following);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
+      }
+    }
   };
 
   const getReactionsByUsername = async () => {
@@ -89,7 +90,7 @@ const Streams = () => {
   };
 
   useEffectOnce(() => {
-    // getUserFollowing();
+    getUserFollowing();
     getReactionsByUsername();
     deleteSelectedPostId();
     dispatch(getPosts());

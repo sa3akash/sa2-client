@@ -27,7 +27,7 @@ const Feelings = ({ setToggleFeelings }: any) => {
               key={feeling.index}
               onClick={() => selectFeeling(feeling)}
             >
-              <img src={feeling.image} alt={feeling.name} /> <span>{feeling.name}</span>
+              <img loading="lazy" src={feeling.image} alt={feeling.name} /> <span>{feeling.name}</span>
             </li>
           ))}
         </ul>

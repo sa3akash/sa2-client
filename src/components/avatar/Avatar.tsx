@@ -50,6 +50,7 @@ const Avatar: React.FC<AvaterProps> = ({ avatarSrc, name, bgColor = '#f33e58', t
         <img
           src={avatarSrc}
           alt=""
+          loading="lazy"
           className="avatar-content avatar-container"
           style={{
             width: `${size}px`,

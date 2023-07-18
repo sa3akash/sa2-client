@@ -2,8 +2,8 @@ import { NotificationDoc } from '@pages/social/notifications/Notifications';
 import { notificationServices } from '@services/api/notification/notification.services';
 import { socketService } from '@services/sockets/socket.services';
 import { cloneDeep, find, findIndex, remove, sumBy } from 'lodash';
-import { Utils } from './Utils.services';
-import { timeAgo } from './timeAgo.utils';
+import { Utils } from '@services/utils/Utils.services';
+import { timeAgo } from '@services/utils/timeAgo.utils';
 import { AppDispatch } from '@store/index';
 
 export class NotificationUtils {

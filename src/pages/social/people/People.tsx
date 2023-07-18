@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '@pages/social/people/people.scss';
 import { FaCircle } from 'react-icons/fa';
 import { Utils } from '@services/utils/Utils.services';
@@ -15,6 +15,8 @@ import CardElementButtons from '@components/cart-eliments/CardElementButtons';
 import CardElementStats from '@components/cart-eliments/CardElementStats';
 import { ProfileUtils } from '@services/utils/Profile.services';
 import { socketService } from '@services/sockets/socket.services';
+import { FollowersUtils } from '@services/utils/followers.utils';
+import { followerService } from '@services/api/followers/followers.services';
 
 const People = () => {
   const { profile } = useSelector((state: RootState) => state.user);
@@ -57,14 +59,29 @@ const People = () => {
     }
   }, [currentPage, dispatch]);
 
+  const getUserFollowing = async () => {
+    try {
+      const response = await followerService.getUserFollowing();
+      setFollowing(response.data.following);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof AxiosError) {
+        Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
+      }
+    }
+  };
+
+  console.log(following);
+
   useEffectOnce(() => {
     getAllUsers();
-    // getUserFollowing();
+    getUserFollowing();
   });
 
-  const followUser = (data: any) => {
+  const followUser = (user: any) => {
     try {
-      // FollowersUtils.followUser(user, dispatch);
+      FollowersUtils.followUser(user, dispatch);
     } catch (error) {
       if (error instanceof AxiosError) {
         Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
@@ -76,14 +93,19 @@ const People = () => {
     try {
       const userData = user;
       userData.followersCount -= 1;
-      socketService?.socket?.emit('unfollow user', userData);
-      // FollowersUtils.unFollowUser(user, profile, dispatch);
+      socketService?.socket?.emit('unfollow', userData);
+      FollowersUtils.unFollowUser(user, profile, dispatch);
     } catch (error) {
       if (error instanceof AxiosError) {
         Utils.addNotification(dispatch, { type: 'error', description: error.response?.data.message });
       }
     }
   };
+
+  useEffect(() => {
+    FollowersUtils.socketIOFollowAndUnfollow(users, following, setFollowing, setUsers);
+    // ChatUtils.usersOnline(setOnlineUsers);
+  }, [following, users]);
 
   return (
     <div className="card-container" ref={bodyRef}>

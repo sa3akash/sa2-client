@@ -314,7 +314,9 @@ const EditPost = () => {
                     >
                       <FaTimes />
                     </div>
-                    {!hasVideo && <img data-testid="post-image" className="post-image" src={`${postImage}`} alt="" />}
+                    {!hasVideo && (
+                      <img loading="lazy" data-testid="post-image" className="post-image" src={`${postImage}`} alt="" />
+                    )}
                     {hasVideo && (
                       <div style={{ marginTop: '-40px' }}>
                         <video width="100%" controls src={`${postImage}`} />

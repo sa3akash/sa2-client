@@ -76,13 +76,13 @@ const ModalBoxSelection = ({ setSelectedPostImage, setSelectedVideo }: BoxProps)
               }}
               handleChange={handleFileChange}
             />
-            <img src={photo} alt="" /> Photo
+            <img loading="lazy" src={photo} alt="" /> Photo
           </li>
           <li className="post-form-list-item" onClick={() => dispatch(toggleGifModal(!gifModalIsOpen))}>
-            <img src={gif} alt="" /> Gif
+            <img loading="lazy" src={gif} alt="" /> Gif
           </li>
           <li className="post-form-list-item" onClick={() => setToggleFeelings(!toggleFeelings)}>
-            <img src={feeling} alt="" /> Feeling
+            <img loading="lazy" src={feeling} alt="" /> Feeling
           </li>
           <li className="post-form-list-item image-select" onClick={videoInputClicked}>
             <Input
@@ -97,7 +97,7 @@ const ModalBoxSelection = ({ setSelectedPostImage, setSelectedVideo }: BoxProps)
               }}
               handleChange={handleVideoFileChange}
             />
-            <img src={videoImg} alt="video" /> Video
+            <img loading="lazy" src={videoImg} alt="video" /> Video
           </li>
         </ul>
       </div>
