@@ -72,8 +72,6 @@ const People = () => {
     }
   };
 
-  console.log(following);
-
   useEffectOnce(() => {
     getAllUsers();
     getUserFollowing();
